@@ -37,7 +37,7 @@ foreach ($user in $users) {
 	Write-Warning -message("Error! Username: " + $user.username + " already exists on Active Directory.") | out-file $file -append 
 	} Else {
 		# Scripting for ACCESS Staff Level 1 specific.
-		$NewUser = New-ADUser -SamAccountName $user.username -Path "OU=Accounts,OU=blah,dc=blah,dc=corp,dc=contoso,dc=com" -Name ($user.FirstName + " " + $user.LastName) -DisplayName ($user.LastName + ", " + $user.FirstName + " (ACCESS LLP)") -GivenName $user.FirstName -Surname $user.LastName -UserPrincipalName ($user.username + $dnsroot) -Title "Manager" -Department "Admin" -StreetAddress "Blah" -City "Blah" -PostalCode "Blah" -HomePhone "0123 456 7891" –HomeDrive 'F:' -HomeDirectory ("\\Server\Location\" + $user.username) -Enabled $true -ChangePasswordAtLogon $true -PasswordNeverExpires  $false -AccountPassword $defpassword -PassThru
+		$NewUser = New-ADUser -SamAccountName $user.username -Path "OU=Accounts,OU=blah,dc=blah,dc=corp,dc=contoso,dc=com" -Name ($user.FirstName + " " + $user.LastName) -DisplayName ($user.LastName + ", " + $user.FirstName + " (ACCESS LLP)") -GivenName $user.FirstName -Surname $user.LastName -UserPrincipalName ($user.username + $dnsroot) -Title "Manager" -Department "Admin" -StreetAddress "Blah" -City "Blah" -PostalCode "Blah" -HomePhone "0123 456 7891" â€“HomeDrive 'F:' -HomeDirectory ("\\Server\Location\" + $user.username) -Enabled $true -ChangePasswordAtLogon $true -PasswordNeverExpires  $false -AccountPassword $defpassword -PassThru
 		# Add permissiont to account after 10 second pause
         Start-Sleep -s 10
 		Add-DistributionGroupMember -Identity "Enter Group Name" -Member $user.username 
