@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<title>PowerShell HTA Example</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<hta:application applicationname="PowerShell HTA Example" version="1.0"	/>
+		
+		<script language="vbscript">
+		Sub Resize()
+			window.resizeTo 500,250
+		End Sub
+			
+		Sub ExecutePowerShell()
+		Dim sResult, sEntry, sCMD
+		
+			'Collect value from input form
+			sEntry = document.getElementByID("input_id").Value
+			
+			'Check user has inputed data
+			If sEntry = "" Then
+				MsgBox "Please enter something in the input box"
+				Exit Sub
+			End If
+		
+		    'Call PowerShell script
+			Set objShell = CreateObject("Wscript.shell")
+		    'sCMD = "powershell -executionpolicy bypass -file GetADInfo.ps1 -Message " &amp; Char(39) &amp; sEntry &amp; Char(39)
+			'sCMD = "powershell -executionpolicy bypass -file GetADInfo.ps1 -Message " & sEntry)
+			'objShell.run(sCMD, 0, true)
+			'objShell.run("powershell -executionpolicy bypass -file GetADInfo.ps1")
+        	objShell.run("powershell -executionpolicy bypass -noexit -file GetADInfo.ps1 "  & sEntry)
+			
+			sResult = CreateObject("htmlfile").ParentWindow.ClipboardData.Getdata("text")
+			
+		End Sub
+		</script>
+	</head>
+	
+	<body onload="Resize()">
+		<h1>PowerShell HTA Example:</h1>
+		<br />
+		<input type="text" id="input_id" value="Enter Username" />
+		<input type="button" id="btn_execute" value="Execute" onclick="ExecutePowerShell()" />
+		<br />
+        <h2>Results</h2>
+	</body>
+</html>
