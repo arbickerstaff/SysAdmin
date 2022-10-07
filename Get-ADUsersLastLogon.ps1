@@ -2,25 +2,37 @@ Import-Module ActiveDirectory
 
 $TesterAccount = "tester"
 
-function Get-ADUsersLastLogon(){    
+function Get-ADUsersLastLogon() {
     $dcs = Get-ADDomainController -Filter {Name -like "*"}
     $user = Get-ADUser -Identity $TesterAccount
-    $time = 0
+	$MyArrayList = New-Object -TypeName "System.Collections.ArrayList"
 
-    foreach($dc in $dcs){ 
-
+    foreach($dc in $dcs) {
+		$time = 0
         $hostname = $dc.HostName
-        $currentUser = Get-ADUser $user.SamAccountName | Get-ADObject -Server $hostname -Properties lastLogon
-
-        if($currentUser.LastLogon -gt $time){
-            $time = $currentUser.LastLogon
-        }
+		if (Test-Connection -Computer $hostname -Count 2 -Quiet) {
+			$currentUser = Get-ADUser $user.SamAccountName | Get-ADObject -Server $hostname -Properties lastLogon
+			if($currentUser.LastLogon -gt $time){
+				$time = $currentUser.LastLogon
+				$dt = [DateTime]::FromFileTime($time)
+				$lastLogon = $dt
+			} else {
+				$lastLogon = $time
+			}
+		} else {
+			$lastLogon = "server did not respond"
+		}
+		$row = [PSCustomObject]@{
+								Host = $hostname;
+								User = $user.Name;
+								SAM = $user.SamAccountName
+								LastLogon = $lastLogon
+								}
+		$MyArrayList += $row
+		$row
     }
 
-    $dt = [DateTime]::FromFileTime($time)
-    $row = $user.Name+" - "+$user.SamAccountName+" - "+$dt
-    $row | Out-GridView
-    $time = 0
+    $MyArrayList | Out-GridView
 }
 
 Get-ADUsersLastLogon
