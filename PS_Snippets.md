@@ -75,6 +75,11 @@ $DNSRoot = $Domain.DNSRoot
 $DistinguishedDomain = $Domain.DistinguishedName
 ```
 
+Prompt for entry of details and store in variable. Then export all account properties from input.
+```powershell
+$UserNameEntry = Read-Host -Prompt 'Enter Username'
+Get-ADUser -Identity $UserNameEntry.samAccountName -Properties * | Out-GridView
+```
 
 :octocat:
 ```powershell
