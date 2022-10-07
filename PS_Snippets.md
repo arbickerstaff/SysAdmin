@@ -81,6 +81,14 @@ $UserNameEntry = Read-Host -Prompt 'Enter Username'
 Get-ADUser -Identity $UserNameEntry.samAccountName -Properties * | Out-GridView
 ```
 
+Convert file to a Base64 string
+```powershell
+$content = get-content -path C:\image.png -encoding byte
+$base64 = [System.Convert]::ToBase64String($content)
+$base64 | Out-File C:\encoded.txt
+```
+
+
 :octocat:
 ```powershell
 ```
