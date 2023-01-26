@@ -88,6 +88,10 @@ $base64 = [System.Convert]::ToBase64String($content)
 $base64 | Out-File C:\encoded.txt
 ```
 
+Get MD5 hash of file to varify the completnes of the file.
+```powershell
+Get-FileHash -Path C:\test.txt -Algorithm MD5 | Format-List
+```
 
 :octocat:
 ```powershell
