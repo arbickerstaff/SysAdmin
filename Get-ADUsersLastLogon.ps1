@@ -1,10 +1,13 @@
-Import-Module ActiveDirectory
+param(
+    [Parameter(Mandatory=$True)]
+    [string]$username
+)
 
-$TesterAccount = "tester"
+Import-Module ActiveDirectory
 
 function Get-ADUsersLastLogon() {
     $dcs = Get-ADDomainController -Filter {Name -like "*"}
-    $user = Get-ADUser -Identity $TesterAccount
+    $user = Get-ADUser -Identity $username
     $MyArrayList = New-Object -TypeName "System.Collections.ArrayList"
 
     foreach($dc in $dcs) {
